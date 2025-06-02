@@ -1,5 +1,5 @@
 # realvora-dapp
-**Realvora** is a decentralized real estate platform built on the Stacks blockchain. It allows users to fractionalize, govern, and invest in tokenized real-world properties through NFTs and DAO governance.
+**Realvora** is a decentralized real estate platform built on the Stacks blockchain. It enables fractional ownership of real-world properties through tokenized NFTs, empowering investors with DAO-based governance and transparent asset management.
 
 ---
 
