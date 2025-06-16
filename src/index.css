@@ -1,0 +1,164 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Realvora Color Palette */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 217 91% 15%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 43 96% 56%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217 91% 15%;
+
+    --radius: 0.5rem;
+
+    /* Realvora specific colors */
+    --realvora-blue: 217 91% 15%;
+    --realvora-gold: 43 96% 56%;
+    --realvora-green: 142 76% 36%;
+    --realvora-navy: 217 91% 10%;
+  }
+
+  .dark {
+    --background: 217 91% 8%;
+    --foreground: 210 40% 98%;
+
+    --card: 217 91% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 217 91% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 217 91% 15%;
+
+    --secondary: 217 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 43 96% 56%;
+    --accent-foreground: 217 91% 15%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 32.6% 17.5%;
+    --input: 217 32.6% 17.5%;
+    --ring: 210 40% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Custom animations for Realvora */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+/* Realvora utility classes */
+.text-realvora-blue {
+  color: hsl(var(--realvora-blue));
+}
+
+.text-realvora-gold {
+  color: hsl(var(--realvora-gold));
+}
+
+.text-realvora-green {
+  color: hsl(var(--realvora-green));
+}
+
+.bg-realvora-blue {
+  background-color: hsl(var(--realvora-blue));
+}
+
+.bg-realvora-gold {
+  background-color: hsl(var(--realvora-gold));
+}
+
+.bg-realvora-green {
+  background-color: hsl(var(--realvora-green));
+}
+
+.bg-realvora-navy {
+  background-color: hsl(var(--realvora-navy));
+}
+
+.border-realvora-gold {
+  border-color: hsl(var(--realvora-gold));
+}
+
+.gradient-realvora {
+  background: linear-gradient(135deg, hsl(var(--realvora-blue)) 0%, hsl(var(--realvora-navy)) 100%);
+}
+
+.gradient-gold {
+  background: linear-gradient(135deg, hsl(var(--realvora-gold)) 0%, hsl(43 96% 48%) 100%);
+}
