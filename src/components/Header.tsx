@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Home, BarChart3, Users, User, Menu, X, Wallet, Vote } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleConnectWallet = () => {
     // Simulate wallet connection
@@ -36,16 +37,23 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => navigate(item.path)}
-                className="flex items-center space-x-2 text-gray-600 hover:text-realvora-blue transition-colors duration-200"
-              >
-                <item.icon className="w-4 h-4" />
-                <span className="font-medium">{item.label}</span>
-              </button>
-            ))}
+            {menuItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center space-x-2 transition-colors duration-200 ${
+                    isActive 
+                      ? 'text-realvora-blue font-bold' 
+                      : 'text-gray-600 hover:text-realvora-blue font-medium'
+                  }`}
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
           </nav>
 
           {/* Wallet Connect Button */}
@@ -76,19 +84,26 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4 animate-slide-in-right">
             <nav className="flex flex-col space-y-4">
-              {menuItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => {
-                    navigate(item.path);
-                    setIsMenuOpen(false);
-                  }}
-                  className="flex items-center space-x-3 text-gray-600 hover:text-realvora-blue transition-colors duration-200 px-2 py-2"
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </button>
-              ))}
+              {menuItems.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <button
+                    key={item.label}
+                    onClick={() => {
+                      navigate(item.path);
+                      setIsMenuOpen(false);
+                    }}
+                    className={`flex items-center space-x-3 transition-colors duration-200 px-2 py-2 ${
+                      isActive 
+                        ? 'text-realvora-blue font-bold' 
+                        : 'text-gray-600 hover:text-realvora-blue font-medium'
+                    }`}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
               <Button
                 onClick={handleConnectWallet}
                 className={`${
