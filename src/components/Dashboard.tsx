@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Wallet, Building, Vote, ArrowUpRight, Calendar } from 'lucide-react';
 import PropertyCard from './PropertyCard';
+import WalletInfo from './WalletInfo';
 
 const Dashboard = () => {
   const userStats = {
@@ -162,6 +163,9 @@ const Dashboard = () => {
                 ))}
               </div>
             </Card>
+
+            {/* Wallet Information */}
+            <WalletInfo />
 
             {/* Quick Actions */}
             <Card className="p-6 bg-white/80 backdrop-blur-sm">

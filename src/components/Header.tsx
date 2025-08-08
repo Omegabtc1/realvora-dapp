@@ -1,19 +1,14 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Home, BarChart3, Users, User, Menu, X, Wallet, Vote } from 'lucide-react';
+import { Home, BarChart3, Users, User, Menu, X, Vote } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import WalletButton from './WalletButton';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const handleConnectWallet = () => {
-    // Simulate wallet connection
-    setIsWalletConnected(!isWalletConnected);
-  };
 
   const menuItems = [
     { icon: Home, label: 'Home', path: '/' },
@@ -58,17 +53,7 @@ const Header = () => {
 
           {/* Wallet Connect Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button
-              onClick={handleConnectWallet}
-              className={`${
-                isWalletConnected 
-                  ? 'bg-realvora-green hover:bg-realvora-green/90' 
-                  : 'bg-realvora-blue hover:bg-realvora-navy'
-              } text-white px-6 py-2 rounded-lg transition-all duration-200`}
-            >
-              <Wallet className="w-4 h-4 mr-2" />
-              {isWalletConnected ? 'Connected' : 'Connect Wallet'}
-            </Button>
+            <WalletButton />
           </div>
 
           {/* Mobile Menu Button */}
@@ -104,17 +89,9 @@ const Header = () => {
                   </button>
                 );
               })}
-              <Button
-                onClick={handleConnectWallet}
-                className={`${
-                  isWalletConnected 
-                    ? 'bg-realvora-green hover:bg-realvora-green/90' 
-                    : 'bg-realvora-blue hover:bg-realvora-navy'
-                } text-white w-full mt-4`}
-              >
-                <Wallet className="w-4 h-4 mr-2" />
-                {isWalletConnected ? 'Connected' : 'Connect Wallet'}
-              </Button>
+              <div className="mt-4">
+                <WalletButton />
+              </div>
             </nav>
           </div>
         )}
