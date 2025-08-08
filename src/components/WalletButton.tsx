@@ -36,7 +36,7 @@ const WalletButton: React.FC = () => {
         className="bg-realvora-blue hover:bg-realvora-navy text-white font-medium px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
       >
         <Wallet className="w-4 h-4" />
-        Connecter Wallet
+        Connect Wallet
       </Button>
     );
   }
@@ -52,11 +52,11 @@ const WalletButton: React.FC = () => {
           <span className="hidden sm:inline">
             {userData?.profile?.stxAddress?.mainnet 
               ? truncateAddress(userData.profile.stxAddress.mainnet)
-              : 'Wallet Connecté'
+              : 'Wallet Connected'
             }
           </span>
           <Badge variant="secondary" className="bg-realvora-green text-white">
-            Connecté
+            Connected
           </Badge>
         </Button>
       </DropdownMenuTrigger>
@@ -64,7 +64,7 @@ const WalletButton: React.FC = () => {
         <DropdownMenuItem className="flex items-center gap-2">
           <User className="w-4 h-4" />
           <span className="font-medium">
-            {userData?.username || 'Utilisateur Stacks'}
+            {userData?.username || 'Stacks User'}
           </span>
         </DropdownMenuItem>
         
@@ -81,7 +81,7 @@ const WalletButton: React.FC = () => {
             <span className="text-sm font-mono">
               {truncateAddress(userData.profile.stxAddress.mainnet)}
             </span>
-            {copied && <span className="text-xs text-green-500">Copié!</span>}
+            {copied && <span className="text-xs text-green-500">Copied!</span>}
           </DropdownMenuItem>
         )}
         
@@ -92,7 +92,7 @@ const WalletButton: React.FC = () => {
           className="flex items-center gap-2 text-red-600 cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
-          Déconnecter
+          Disconnect
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
