@@ -1,0 +1,94 @@
+[project]
+name = "realvora-dapp"
+description = "Realvora DApp - Tokenized Real Estate Investment Platform"
+authors = ["Realvora Team"]
+telemetry = false
+cache_dir = "./.clarinet"
+requirements = []
+[contracts.realvora-property-nft]
+path = "contracts/realvora-property-nft.clar"
+clarity_version = 2
+epoch = "2.1"
+
+[contracts.realvora-dao]
+path = "contracts/realvora-dao.clar"
+clarity_version = 2
+epoch = "2.1"
+
+[contracts.realvora-marketplace]
+path = "contracts/realvora-marketplace.clar"
+clarity_version = 2
+epoch = "2.1"
+
+[repl.analysis]
+passes = ["check_checker"]
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false
+
+[[repl.costs]]
+compute_units = 1000000
+read_count = 30
+read_length = 100000
+runtime = 5000
+write_count = 5
+write_length = 5000
+
+[devnet]
+enable_subnet_node = true
+
+[devnet.bitcoin_node]
+rpc_port = 18443
+p2p_port = 18444
+
+[devnet.stacks_node]
+rpc_port = 20443
+p2p_port = 20444
+
+[devnet.subnet_node]
+rpc_port = 30443
+p2p_port = 30444
+
+[devnet.postgres_database]
+port = 5432
+database = "clarinet"
+
+[devnet.bitcoin_explorer]
+port = 8001
+
+[devnet.stacks_explorer]
+port = 8000
+
+[devnet.stacks_api]
+port = 3999
+database = "clarinet"
+
+# Testnet configuration
+[network.testnet]
+stacks_node_rpc_address = "https://stacks-node-api.testnet.stacks.co"
+bitcoin_node_rpc_address = "https://blockstream.info/testnet/api"
+
+# Mainnet configuration  
+[network.mainnet]
+stacks_node_rpc_address = "https://stacks-node-api.mainnet.stacks.co"
+bitcoin_node_rpc_address = "https://blockstream.info/api"
+
+# Deployment accounts
+[accounts.deployer]
+mnemonic = "your-mnemonic-here"
+balance = 100000000000
+
+[accounts.wallet_1]
+mnemonic = "your-test-mnemonic-1"
+balance = 100000000000
+
+[accounts.wallet_2]
+mnemonic = "your-test-mnemonic-2"
+balance = 100000000000
+
+[accounts.wallet_3]
+mnemonic = "your-test-mnemonic-3"
+balance = 100000000000
