@@ -322,7 +322,7 @@ const Marketplace = () => {
               </Card>
             );
           })}
-        </div>
+        </div> 
 
         {/* Empty State */}
         {!loading && sortedProperties.length === 0 && (
