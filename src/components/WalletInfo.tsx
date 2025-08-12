@@ -29,8 +29,8 @@ const WalletInfo: React.FC = () => {
     } catch (error) {
       console.error('Error fetching balance:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de récupérer le solde du wallet",
+        title: "Error",
+        description: "Unable to retrieve wallet balance",
         variant: "destructive",
       });
     } finally {
@@ -46,8 +46,8 @@ const WalletInfo: React.FC = () => {
     if (address) {
       await navigator.clipboard.writeText(address);
       toast({
-        title: "Adresse copiée",
-        description: "L'adresse du wallet a été copiée dans le presse-papiers",
+        title: "Address copied",
+        description: "Wallet address has been copied to clipboard",
       });
     }
   };
@@ -68,7 +68,7 @@ const WalletInfo: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Connectez votre wallet pour voir vos informations</p>
+          <p className="text-muted-foreground">Connect your wallet to see your information</p>
         </CardContent>
       </Card>
     );
@@ -83,14 +83,14 @@ const WalletInfo: React.FC = () => {
             Wallet Stacks
           </div>
           <Badge variant="secondary" className="bg-realvora-green text-white">
-            Connecté
-          </Badge>
+              Connected
+            </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Adresse */}
+        {/* Address */}
         <div>
-          <label className="text-sm font-medium text-muted-foreground">Adresse</label>
+          <label className="text-sm font-medium text-muted-foreground">Address</label>
           <div className="flex items-center gap-2 mt-1">
             <code className="flex-1 text-sm bg-muted p-2 rounded font-mono">
               {address ? `${address.slice(0, 8)}...${address.slice(-8)}` : 'N/A'}
@@ -104,10 +104,10 @@ const WalletInfo: React.FC = () => {
           </div>
         </div>
 
-        {/* Solde */}
+        {/* Balance */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-medium text-muted-foreground">Solde STX</label>
+            <label className="text-sm font-medium text-muted-foreground">STX Balance</label>
             <Button 
               size="sm" 
               variant="ghost" 
@@ -121,21 +121,21 @@ const WalletInfo: React.FC = () => {
           {balance ? (
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm">Disponible:</span>
+                <span className="text-sm">Available:</span>
                 <span className="font-medium">{balance.stx.toFixed(6)} STX</span>
               </div>
               {balance.locked > 0 && (
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Verrouillé:</span>
+                  <span className="text-sm">Locked:</span>
                   <span className="font-medium">{balance.locked.toFixed(6)} STX</span>
                 </div>
               )}
               <div className="flex justify-between items-center text-sm text-muted-foreground">
-                <span>Total reçu:</span>
+                <span>Total received:</span>
                 <span>{balance.total_received.toFixed(6)} STX</span>
               </div>
               <div className="flex justify-between items-center text-sm text-muted-foreground">
-                <span>Total envoyé:</span>
+                <span>Total sent:</span>
                 <span>{balance.total_sent.toFixed(6)} STX</span>
               </div>
             </div>
@@ -144,10 +144,10 @@ const WalletInfo: React.FC = () => {
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span className="text-sm">Chargement...</span>
+                  <span className="text-sm">Loading...</span>
                 </div>
               ) : (
-                <span className="text-sm text-muted-foreground">Impossible de charger le solde</span>
+                <span className="text-sm text-muted-foreground">Unable to load balance</span>
               )}
             </div>
           )}

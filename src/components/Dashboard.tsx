@@ -1,19 +1,76 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Wallet, Building, Vote, ArrowUpRight, Calendar } from 'lucide-react';
 import PropertyCard from './PropertyCard';
 import WalletInfo from './WalletInfo';
+import { useContracts } from '../hooks/useContracts';
+import { PropertyData } from '../services/contractService';
+import { useWallet } from '../contexts/WalletContext';
+import { toast } from '../hooks/use-toast';
 
 const Dashboard = () => {
-  const userStats = {
-    totalInvested: '€15,450',
-    monthlyReturn: '€127.23',
-    portfolioYield: '9.87%',
-    nftCount: 12
-  };
+  const { userSession } = useWallet();
+  const { getProperty, getUserShares, loading, error } = useContracts();
+  const [properties, setProperties] = useState<PropertyData[]>([]);
+  const [userStats, setUserStats] = useState({
+    totalInvested: '€0',
+    monthlyReturn: '€0',
+    portfolioYield: '0%',
+    nftCount: 0
+  });
+
+  // Load properties and user data
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      if (!userSession?.isUserSignedIn()) return;
+
+      try {
+        // Load properties (assuming property IDs 1-10 for demo)
+        const propertyPromises = [];
+        for (let i = 1; i <= 10; i++) {
+          propertyPromises.push(getProperty(i));
+        }
+        
+        const propertyResults = await Promise.all(propertyPromises);
+        const validProperties = propertyResults.filter(p => p !== null) as PropertyData[];
+        setProperties(validProperties);
+
+        // Calculate user stats
+        if (validProperties.length > 0) {
+          const userAddress = userSession.loadUserData().profile.stxAddress.testnet;
+          let totalInvested = 0;
+          let totalShares = 0;
+
+          for (const property of validProperties) {
+            const shares = await getUserShares(userAddress, property.id);
+            if (shares > 0) {
+              totalShares += shares;
+              totalInvested += shares * property.pricePerShare;
+            }
+          }
+
+          setUserStats({
+            totalInvested: `€${(totalInvested / 1000000).toFixed(2)}`, // Convert from micro-STX
+            monthlyReturn: `€${(totalInvested * 0.08 / 12 / 1000000).toFixed(2)}`, // Estimated 8% annual yield
+            portfolioYield: '8.5%',
+            nftCount: totalShares
+          });
+        }
+      } catch (err) {
+        console.error('Error loading dashboard data:', err);
+        toast({
+          title: 'Error',
+          description: 'Unable to load dashboard data',
+          variant: 'destructive'
+        });
+      }
+    };
+
+    loadDashboardData();
+  }, [userSession, getProperty, getUserShares]);
 
   const recentTransactions = [
     { type: 'Rent received', amount: '+€42.15', property: 'Monaco Villa', date: '2024-06-10' },
@@ -21,30 +78,18 @@ const Dashboard = () => {
     { type: 'DAO Vote', amount: '', property: 'Proposal #15', date: '2024-06-05' }
   ];
 
-  const userProperties = [
-    {
-      id: '1',
-      title: 'Luxury Villa Monaco',
-      location: 'Monaco, Monaco',
-      image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=800&q=80',
-      price: '€500',
-      yield: '8.5%',
-      totalShares: 1000,
-      availableShares: 0,
-      category: 'Villa'
-    },
-    {
-      id: '2',
-      title: 'Haussmann Apartment',
-      location: 'Paris 16th, France',
-      image: 'https://images.unsplash.com/photo-1551038247-3d9af20df552?auto=format&fit=crop&w=800&q=80',
-      price: '€250',
-      yield: '11.2%',
-      totalShares: 2000,
-      availableShares: 450,
-      category: 'Apartment'
-    }
-  ];
+  // Convert contract properties to UI format
+  const userProperties = properties.map(property => ({
+    id: property.id.toString(),
+    title: property.name,
+    location: property.location,
+    image: property.metadataUri || 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=800&q=80',
+    price: `€${(property.pricePerShare / 1000000).toFixed(2)}`, // Convert from micro-STX
+    yield: `${(property.rentalYield / 100).toFixed(1)}%`,
+    totalShares: property.totalShares,
+    availableShares: property.availableShares,
+    category: 'Property'
+  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">
