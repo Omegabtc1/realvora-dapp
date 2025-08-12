@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -46,7 +47,7 @@ const Governance = () => {
     },
   ];
 
-  const proposals = {
+  const [proposals, setProposals] = useState({
     active: [
       {
         id: 1,
@@ -129,7 +130,7 @@ const Governance = () => {
         propertyTitle: "Design Loft Berlin",
       },
     ],
-  };
+  });
 
   // Filter proposals based on selected property and user ownership
   const getFilteredProposals = (status) => {
@@ -148,8 +149,47 @@ const Governance = () => {
   };
 
   const handleVote = (proposalId, voteType) => {
-    console.log(`Voting ${voteType} on proposal ${proposalId}`);
-    // Implement voting logic here
+    // Find the proposal
+    const proposalIndex = proposals.active.findIndex(p => p.id === proposalId);
+    if (proposalIndex === -1) return;
+
+    const proposal = proposals.active[proposalIndex];
+    
+    // Check if user owns shares in this property
+    const userProperty = userOwnedProperties.find(p => p.id === proposal.propertyId);
+    if (!userProperty) {
+      toast({
+        title: "Error",
+        description: "You must own shares in this property to vote",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Update the proposal with the vote
+    const updatedProposals = { ...proposals };
+    const updatedProposal = { ...proposal };
+    
+    // Add user's voting power to the vote count
+    const votingPower = userProperty.shares;
+    
+    if (voteType === "for") {
+      updatedProposal.votesFor += votingPower;
+    } else {
+      updatedProposal.votesAgainst += votingPower;
+    }
+    
+    updatedProposal.totalVotes += votingPower;
+    updatedProposal.userVoted = true;
+    updatedProposal.userVote = voteType;
+    
+    updatedProposals.active[proposalIndex] = updatedProposal;
+    setProposals(updatedProposals);
+
+    toast({
+      title: "Vote Submitted!",
+      description: `You voted ${voteType === "for" ? "For" : "Against"} with ${votingPower} shares`,
+    });
   };
 
   // Calculate user's voting power for selected property
