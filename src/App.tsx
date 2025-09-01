@@ -10,6 +10,7 @@ import DashboardPage from "./pages/DashboardPage";
 import MarketplacePage from "./pages/MarketplacePage";
 import ProfilePage from "./pages/ProfilePage";
 import GovernancePage from "./pages/GovernancePage";
+import PropertyAnalyticsPage from "./pages/PropertyAnalyticsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/governance" element={<GovernancePage />} />
+            <Route path="/property/:propertyId/analytics" element={<PropertyAnalyticsPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

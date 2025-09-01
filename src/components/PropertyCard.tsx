@@ -1,9 +1,10 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, TrendingUp, Users } from 'lucide-react';
+import { MapPin, TrendingUp, Users, BarChart3 } from 'lucide-react';
 
 interface PropertyCardProps {
   id: string;
@@ -18,6 +19,7 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({
+  id,
   title,
   location,
   image,
@@ -88,7 +90,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex space-x-3">
+        <div className="flex space-x-2">
           <Button 
             className="flex-1 bg-realvora-blue hover:bg-realvora-navy text-white transition-all duration-200"
             disabled={availableShares === 0}
@@ -101,6 +103,15 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           >
             Details
           </Button>
+          <Link to={`/property/${id}/analytics`}>
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="border-gray-300 text-gray-600 hover:bg-gray-100 transition-all duration-200"
+            >
+              <BarChart3 className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     </Card>
