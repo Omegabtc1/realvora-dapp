@@ -1,21 +1,24 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Home, BarChart3, Users, User, Menu, X, Vote } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Home, BarChart3, Users, User, Menu, X, Vote, LogOut, Settings, Shield, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import WalletButton from './WalletButton';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const menuItems = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: BarChart3, label: 'Dashboard', path: '/dashboard' },
     { icon: Users, label: 'Marketplace', path: '/marketplace' },
-    { icon: Vote, label: 'Governance', path: '/governance' },
-    { icon: User, label: 'Profile', path: '/profile' }
+    { icon: Vote, label: 'Governance', path: '/governance' }
   ];
 
   return (
@@ -51,9 +54,63 @@ const Header = () => {
             })}
           </nav>
 
-          {/* Wallet Connect Button */}
+          {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <WalletButton />
+            {isAuthenticated && user ? (
+              <>
+
+                
+                {/* Wallet Button - only show if KYC approved */}
+                {user.kycStatus === 'approved' && <WalletButton />}
+                
+                {/* User Menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center space-x-2">
+                      <div className="w-8 h-8 bg-realvora-blue rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="font-medium">{user.firstName}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="px-2 py-1.5">
+                      <p className="text-sm font-medium">{user.firstName} {user.lastName}</p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/user-profile')}>
+                      <User className="w-4 h-4 mr-2" />
+                      Profile
+                    </DropdownMenuItem>
+                    {user.kycStatus !== 'approved' && (
+                      <DropdownMenuItem onClick={() => navigate('/kyc-verification')}>
+                        <Shield className="w-4 h-4 mr-2" />
+                        Complete KYC
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem onClick={() => navigate('/settings')}>
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout} className="text-red-600">
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Button variant="ghost" onClick={() => navigate('/login')}>
+                  Sign In
+                </Button>
+                <Button onClick={() => navigate('/register')} className="bg-realvora-blue hover:bg-realvora-navy">
+                  Sign Up
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -90,7 +147,48 @@ const Header = () => {
                 );
               })}
               <div className="mt-4">
-                <WalletButton />
+                {isAuthenticated && user ? (
+                  <div className="space-y-3">
+                    <div className="px-2 py-2 border-t border-gray-200">
+                      <p className="text-sm font-medium text-gray-900">{user.firstName} {user.lastName}</p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                      {user.kycStatus && (
+                        <div className="mt-2">
+                          {user.kycStatus === 'approved' && (
+                            <Badge className="bg-green-100 text-green-800">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Verified
+                            </Badge>
+                          )}
+                          {user.kycStatus === 'pending' && (
+                            <Badge className="bg-gray-100 text-gray-800">
+                              <AlertTriangle className="w-3 h-3 mr-1" />
+                              KYC Pending
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {user.kycStatus === 'approved' && <WalletButton />}
+                    <Button 
+                      variant="outline" 
+                      onClick={logout} 
+                      className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Button variant="outline" onClick={() => navigate('/login')} className="w-full">
+                      Sign In
+                    </Button>
+                    <Button onClick={() => navigate('/register')} className="w-full bg-realvora-blue hover:bg-realvora-navy">
+                      Sign Up
+                    </Button>
+                  </div>
+                )}
               </div>
             </nav>
           </div>
