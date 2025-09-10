@@ -6,21 +6,39 @@ import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Wallet, Building, Vote, ArrowUpRight, Calendar } from 'lucide-react';
 import PropertyCard from './PropertyCard';
 import WalletInfo from './WalletInfo';
+import KYCWarning from './KYCWarning';
 import { useContracts } from '../hooks/useContracts';
 import { PropertyData } from '../services/contractService';
 import { useWallet } from '../contexts/WalletContext';
+import { useAuth } from '../contexts/AuthContext';
 import { toast } from '../hooks/use-toast';
 
 const Dashboard = () => {
   const { userSession } = useWallet();
   const { getProperty, getUserShares, loading, error } = useContracts();
+  const { user } = useAuth();
   const [properties, setProperties] = useState<PropertyData[]>([]);
+  const [showKYCWarning, setShowKYCWarning] = useState(false);
   const [userStats, setUserStats] = useState({
     totalInvested: '€0',
     monthlyReturn: '€0',
     portfolioYield: '0%',
     nftCount: 0
   });
+
+  const isKYCApproved = user?.kycStatus === 'approved';
+
+  const handleTransactionAction = (action: string) => {
+    if (!isKYCApproved) {
+      setShowKYCWarning(true);
+      return;
+    }
+    // Logique d'action existante
+    toast({
+      title: 'Action initiated',
+      description: `${action} action started`,
+    });
+  };
 
   // Load properties and user data
   useEffect(() => {
@@ -99,6 +117,17 @@ const Dashboard = () => {
           <h1 className="text-3xl font-bold text-realvora-blue mb-2">My Dashboard</h1>
           <p className="text-gray-600">Manage your tokenized real estate portfolio</p>
         </div>
+
+        {/* KYC Warning */}
+        {showKYCWarning && (
+          <div className="mb-8">
+            <KYCWarning 
+              message="Complete your KYC verification to perform transactions and access all dashboard features."
+              onClose={() => setShowKYCWarning(false)}
+              variant="banner"
+            />
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
@@ -216,21 +245,41 @@ const Dashboard = () => {
             <Card className="p-6 bg-white/80 backdrop-blur-sm">
               <h2 className="text-xl font-semibold text-realvora-blue mb-6">Quick Actions</h2>
               
+              {!isKYCApproved && (
+                <div className="mb-4">
+                  <KYCWarning 
+                    message="Complete KYC to access transaction features."
+                    showButton={false}
+                    variant="inline"
+                  />
+                </div>
+              )}
+              
               <div className="space-y-3">
-                <Button className="w-full bg-realvora-blue hover:bg-realvora-navy text-white justify-start">
+                <Button 
+                  className="w-full bg-realvora-blue hover:bg-realvora-navy text-white justify-start disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={!isKYCApproved}
+                  onClick={() => handleTransactionAction('Buy NFTs')}
+                >
                   <Building className="w-4 h-4 mr-2" />
-                  Buy NFTs
+                  {!isKYCApproved ? 'Buy NFTs (KYC Required)' : 'Buy NFTs'}
                 </Button>
-                <Button className="w-full bg-realvora-green hover:bg-realvora-green/90 text-white justify-start">
+                <Button 
+                  className="w-full bg-realvora-green hover:bg-realvora-green/90 text-white justify-start disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={!isKYCApproved}
+                  onClick={() => handleTransactionAction('DAO Votes')}
+                >
                   <Vote className="w-4 h-4 mr-2" />
-                  View DAO Votes
+                  {!isKYCApproved ? 'DAO Votes (KYC Required)' : 'View DAO Votes'}
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="w-full border-realvora-gold text-realvora-gold hover:bg-realvora-gold hover:text-white justify-start"
+                  className="w-full border-realvora-gold text-realvora-gold hover:bg-realvora-gold hover:text-white justify-start disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
+                  disabled={!isKYCApproved}
+                  onClick={() => handleTransactionAction('Analyze Performance')}
                 >
                   <TrendingUp className="w-4 h-4 mr-2" />
-                  Analyze Performance
+                  {!isKYCApproved ? 'Analytics (KYC Required)' : 'Analyze Performance'}
                 </Button>
               </div>
             </Card>

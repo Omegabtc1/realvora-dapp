@@ -1,10 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, TrendingUp, Users, BarChart3 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import KYCWarning from './KYCWarning';
 
 interface PropertyCardProps {
   id: string;
@@ -29,7 +31,20 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   availableShares,
   category
 }) => {
+  const { user } = useAuth();
+  const [showKYCWarning, setShowKYCWarning] = useState(false);
   const sharesSoldPercentage = ((totalShares - availableShares) / totalShares) * 100;
+
+  const isKYCApproved = user?.kycStatus === 'approved';
+  const canInvest = availableShares > 0 && isKYCApproved;
+
+  const handleInvestClick = () => {
+    if (!isKYCApproved) {
+      setShowKYCWarning(true);
+      return;
+    }
+    // Logique d'investissement existante
+  };
 
   return (
     <Card className="group overflow-hidden bg-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
@@ -89,13 +104,25 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           ></div>
         </div>
 
+        {/* KYC Warning */}
+        {showKYCWarning && (
+          <div className="mb-4">
+            <KYCWarning 
+              message="Complete your KYC verification to invest in properties."
+              onClose={() => setShowKYCWarning(false)}
+              variant="banner"
+            />
+          </div>
+        )}
+
         {/* Action Buttons */}
         <div className="flex space-x-2">
           <Button 
-            className="flex-1 bg-realvora-blue hover:bg-realvora-navy text-white transition-all duration-200"
-            disabled={availableShares === 0}
+            className="flex-1 bg-realvora-blue hover:bg-realvora-navy text-white transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={!canInvest}
+            onClick={handleInvestClick}
           >
-            {availableShares === 0 ? 'Sold Out' : 'Invest'}
+            {availableShares === 0 ? 'Sold Out' : !isKYCApproved ? 'KYC Required' : 'Invest'}
           </Button>
           <Button 
             variant="outline" 
