@@ -35,8 +35,8 @@ We’re redefining real estate access by:
 ## 🛠 Project Status
 
 🧪 In development  
-📅 Testnet Launch: Q2 2025  
-📢 Mainnet Target: Q3–Q4 2025
+📅 Testnet Launch: Q4 2025  
+📢 Mainnet Target: TBD
 
 ---
 
