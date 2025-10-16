@@ -41,7 +41,7 @@ Realvora addresses these challenges by:
 ---
 
 ## 🎥 Demo + Prototype
-- *Live App:* 
+- *Live App:* https://realvora-dapp-f5jc0b8k3-divine-praise-s-projects.vercel.app
 
 > The demo video shows wallet connection, NFT minting, dummy KYC, and live property analytics.
 
