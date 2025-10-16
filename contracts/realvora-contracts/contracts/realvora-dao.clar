@@ -1,7 +1,6 @@
 ;; Realvora DAO Governance Contract
 ;; This contract manages decentralized governance for property decisions
 ;; and protocol upgrades through shareholder voting
-
 ;; Constants
 (define-constant CONTRACT_OWNER tx-sender)
 (define-constant ERR_UNAUTHORIZED (err u200))
