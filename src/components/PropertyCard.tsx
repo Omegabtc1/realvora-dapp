@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, TrendingUp, Users, BarChart3 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import KYCWarning from './KYCWarning';
+//import KYCWarning from './KYCWarning';
 
 interface PropertyCardProps {
   id: string;
@@ -32,17 +32,14 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   category
 }) => {
   const { user } = useAuth();
-  const [showKYCWarning, setShowKYCWarning] = useState(false);
+  //const [showKYCWarning, setShowKYCWarning] = useState(false);
   const sharesSoldPercentage = ((totalShares - availableShares) / totalShares) * 100;
 
-  const isKYCApproved = user?.kycStatus === 'approved';
-  const canInvest = availableShares > 0 && isKYCApproved;
+  //const isKYCApproved = user?.kycStatus === 'approved';
+  const canInvest = availableShares > 0;
 
   const handleInvestClick = () => {
-    if (!isKYCApproved) {
-      setShowKYCWarning(true);
-      return;
-    }
+    console.log('Investing in Property:', id)
     // Logique d'investissement existante
   };
 
@@ -105,7 +102,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* KYC Warning */}
-        {showKYCWarning && (
+        {/*showKYCWarning && (
           <div className="mb-4">
             <KYCWarning 
               message="Complete your KYC verification to invest in properties."
@@ -113,7 +110,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               variant="banner"
             />
           </div>
-        )}
+        ) */}
 
         {/* Action Buttons */}
         <div className="flex space-x-2">
@@ -122,7 +119,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             disabled={!canInvest}
             onClick={handleInvestClick}
           >
-            {availableShares === 0 ? 'Sold Out' : !isKYCApproved ? 'KYC Required' : 'Invest'}
+            {availableShares === 0 ? 'Sold Out' : 'Invest'}
           </Button>
           <Button 
             variant="outline" 

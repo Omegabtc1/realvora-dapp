@@ -16,7 +16,7 @@ import { PropertyData } from '../services/contractService';
 import { useWallet } from '../contexts/WalletContext';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from '../hooks/use-toast';
-import KYCWarning from './KYCWarning';
+//import KYCWarning from './KYCWarning';
 
 const Marketplace = () => {
   const { userSession } = useWallet();
@@ -35,9 +35,9 @@ const Marketplace = () => {
   const [filterCategory, setFilterCategory] = useState("all");
   const [properties, setProperties] = useState<PropertyData[]>([]);
   const [purchaseAmounts, setPurchaseAmounts] = useState<{ [key: number]: number }>({});
-  const [showKYCWarning, setShowKYCWarning] = useState(false);
+  //const [showKYCWarning, setShowKYCWarning] = useState(false);
 
-  const isKYCApproved = user?.kycStatus === 'approved';
+  //const isKYCApproved = user?.kycStatus === 'approved';
 
   // Load properties from contracts
   useEffect(() => {
@@ -75,10 +75,10 @@ const Marketplace = () => {
       return;
     }
 
-    if (!isKYCApproved) {
+    /*if (!isKYCApproved) {
       setShowKYCWarning(true);
       return;
-    }
+    }*/
 
     try {
       await purchaseShares(propertyId, shares, {
@@ -114,10 +114,10 @@ const Marketplace = () => {
       return;
     }
 
-    if (!isKYCApproved) {
+    /*if (!isKYCApproved) {
       setShowKYCWarning(true);
       return;
-    }
+    }*/
 
     try {
       await createBuyOrder(propertyId, shares, pricePerShare, 1440, { // 1440 blocks ≈ 10 days
@@ -182,7 +182,7 @@ const Marketplace = () => {
         </div>
 
         {/* KYC Warning */}
-        {showKYCWarning && (
+        {/*showKYCWarning && (
           <div className="mb-8">
             <KYCWarning 
               message="Complete your KYC verification to perform transactions on the marketplace."
@@ -190,7 +190,7 @@ const Marketplace = () => {
               variant="banner"
             />
           </div>
-        )}
+        )*/}
 
         {/* Search and Filters */}
         <div className="bg-white rounded-xl shadow-sm border p-6 mb-8">
@@ -324,18 +324,18 @@ const Marketplace = () => {
                         <Button
                           className="flex-1 disabled:bg-gray-400 disabled:cursor-not-allowed"
                           onClick={() => handlePurchaseShares(property.id, purchaseAmount)}
-                          disabled={purchaseAmount <= 0 || loading || !isKYCApproved}
+                          disabled={purchaseAmount <= 0 || loading}
                         >
                           <ShoppingCart className="h-4 w-4 mr-2" />
-                          {!isKYCApproved ? 'KYC Required' : 'Buy'}
+                          Buy
                         </Button>
                         <Button
                           variant="outline"
                           className="disabled:bg-gray-100 disabled:cursor-not-allowed"
                           onClick={() => handleCreateBuyOrder(property.id, purchaseAmount, property.pricePerShare)}
-                          disabled={purchaseAmount <= 0 || loading || !isKYCApproved}
+                          disabled={purchaseAmount <= 0 || loading}
                         >
-                          {!isKYCApproved ? 'KYC Required' : 'Order'}
+                          Buy
                         </Button>
                       </div>
                     </div>

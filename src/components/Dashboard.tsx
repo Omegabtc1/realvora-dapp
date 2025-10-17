@@ -30,7 +30,7 @@ const Dashboard = () => {
 
   const handleTransactionAction = (action: string) => {
     if (!isKYCApproved) {
-      setShowKYCWarning(true);
+      setShowKYCWarning(false);
       return;
     }
     // Logique d'action existante
@@ -123,7 +123,7 @@ const Dashboard = () => {
           <div className="mb-8">
             <KYCWarning 
               message="Complete your KYC verification to perform transactions and access all dashboard features."
-              onClose={() => setShowKYCWarning(false)}
+              onClose={() => setShowKYCWarning(true)}
               variant="banner"
             />
           </div>

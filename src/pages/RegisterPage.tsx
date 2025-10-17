@@ -80,7 +80,7 @@ const RegisterPage = () => {
     try {
       const result = await register(formData);
       if (result.success) {
-        navigate('/kyc-verification');
+        navigate('/dashboard');
       } else {
         setError(result.error || 'Registration failed');
       }
